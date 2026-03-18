@@ -1,0 +1,37 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Gerente",
+      "email": "gerente@test.com",
+      "password": "123456",
+      "role": "gerente"
+    },
+    {
+      "id": 2,
+      "name": "Usuario",
+      "email": "usuario@test.com",
+      "password": "123456",
+      "role": "usuario"
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "name": "Proyecto",
+      "description": "Proyecto inicial",
+      "status": "activo",
+      "managerId": 1
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Diseñar login",
+      "description": "Crear pantalla de login",
+      "status": "pendiente",
+      "projectId": 1,
+      "assignedTo": 2
+    }
+  ]
+}
