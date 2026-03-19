@@ -1,23 +1,30 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Gerente",
       "email": "gerente@test.com",
       "password": "123456",
       "role": "gerente"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Usuario",
       "email": "usuario@test.com",
       "password": "123456",
       "role": "usuario"
+    },
+    {
+      "id": "c7f8",
+      "name": "Lisandro",
+      "email": "lisanro1995@gmail.com",
+      "password": "Prueba1",
+      "role": "gerente"
     }
   ],
   "projects": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Proyecto",
       "description": "Proyecto inicial",
       "status": "activo",
@@ -26,12 +33,13 @@
   ],
   "tasks": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Diseñar login",
       "description": "Crear pantalla de login",
       "status": "pendiente",
       "projectId": 1,
       "assignedTo": 2
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
