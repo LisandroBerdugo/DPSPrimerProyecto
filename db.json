@@ -31,66 +31,20 @@
   ],
   "projects": [
     {
-      "id": "1",
-      "name": "Proyecto",
-      "description": "Proyecto",
-      "status": "cerrado",
-      "managerId": 1
-    },
-    {
-      "id": "ef3e",
-      "name": "Prueba Lisandro",
-      "description": "Prueba para ver si solo muestra 1 proyecto en cada usuario",
-      "status": "activo",
-      "managerId": "3"
-    },
-    {
-      "id": "4448",
-      "name": "Proyecto de prueba 6",
-      "description": "Proyecto de prueba 6",
+      "id": "6d6a",
+      "name": "Prueba Nuevo",
+      "description": "Prueva Nuevo",
       "status": "cerrado",
       "managerId": "3"
     }
   ],
   "tasks": [
     {
-      "id": "1",
-      "title": "Diseñar login",
-      "description": "Crear pantalla de login",
+      "id": "3682",
+      "title": "Prueba nuevo",
+      "description": "Prueba nuevo",
       "status": "finalizado",
-      "projectId": 1,
-      "assignedTo": 2
-    },
-    {
-      "id": "93e8",
-      "title": "Tarea de proyecto",
-      "description": "Tarea de proyecto 1",
-      "status": "finalizado",
-      "projectId": "1",
-      "assignedTo": 2
-    },
-    {
-      "id": "8fda",
-      "title": "Prueba 5",
-      "description": "Prueba 5",
-      "status": "asignada",
-      "projectId": "ef3e",
-      "assignedTo": "6bd3"
-    },
-    {
-      "id": "9411",
-      "title": "Prueba 6",
-      "description": "Prueba 6",
-      "status": "finalizado",
-      "projectId": "ef3e",
-      "assignedTo": "2"
-    },
-    {
-      "id": "d72c",
-      "title": "Proyecto 7",
-      "description": "Tarea 7",
-      "status": "finalizado",
-      "projectId": "4448",
+      "projectId": "6d6a",
       "assignedTo": "6bd3"
     }
   ],
