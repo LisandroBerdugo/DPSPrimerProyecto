@@ -20,21 +20,35 @@
       "email": "lisanro1995@gmail.com",
       "password": "Prueba1",
       "role": "gerente"
+    },
+    {
+      "id": "6bd3",
+      "name": "Lisandro Usuario",
+      "email": "lrba@gmail.com",
+      "password": "Prueba1",
+      "role": "usuario"
     }
   ],
   "projects": [
     {
       "id": "1",
       "name": "Proyecto",
-      "description": "Proyecto inicial",
-      "status": "activo",
+      "description": "Proyecto",
+      "status": "cerrado",
       "managerId": 1
     },
     {
-      "id": "f008",
-      "name": "Prueba",
-      "description": "Prueba",
+      "id": "ef3e",
+      "name": "Prueba Lisandro",
+      "description": "Prueba para ver si solo muestra 1 proyecto en cada usuario",
       "status": "activo",
+      "managerId": "3"
+    },
+    {
+      "id": "4448",
+      "name": "Proyecto de prueba 6",
+      "description": "Proyecto de prueba 6",
+      "status": "cerrado",
       "managerId": "3"
     }
   ],
@@ -43,9 +57,41 @@
       "id": "1",
       "title": "Diseñar login",
       "description": "Crear pantalla de login",
-      "status": "pendiente",
+      "status": "finalizado",
       "projectId": 1,
       "assignedTo": 2
+    },
+    {
+      "id": "93e8",
+      "title": "Tarea de proyecto",
+      "description": "Tarea de proyecto 1",
+      "status": "finalizado",
+      "projectId": "1",
+      "assignedTo": 2
+    },
+    {
+      "id": "8fda",
+      "title": "Prueba 5",
+      "description": "Prueba 5",
+      "status": "asignada",
+      "projectId": "ef3e",
+      "assignedTo": "6bd3"
+    },
+    {
+      "id": "9411",
+      "title": "Prueba 6",
+      "description": "Prueba 6",
+      "status": "finalizado",
+      "projectId": "ef3e",
+      "assignedTo": "2"
+    },
+    {
+      "id": "d72c",
+      "title": "Proyecto 7",
+      "description": "Tarea 7",
+      "status": "finalizado",
+      "projectId": "4448",
+      "assignedTo": "6bd3"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
