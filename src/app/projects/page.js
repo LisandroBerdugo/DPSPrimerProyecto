@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import { useAuth } from "../../context/AuthContext";
@@ -331,7 +332,14 @@ export default function ProjectsPage() {
   return (
     <ProtectedRoute>
       <main className="container py-5">
-        <h1 className="text-primary mb-4">Proyectos</h1>
+        <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+          <h1 className="text-primary mb-0">Proyectos</h1>
+
+          <Link href="/dashboard" className="btn btn-primary">
+            <i className="bi bi-arrow-left me-2"></i>
+            Volver
+          </Link>
+        </div>
 
         {user?.role === "gerente" && (
           <>
