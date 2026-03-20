@@ -6,20 +6,35 @@ import api from "../services/api";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    if (typeof window === "undefined") return null;
+
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
     setLoading(false);
   }, []);
 
   const login = async (email, password) => {
-    const response = await api.get(`/users?email=${email}&password=${password}`);
-    const foundUser = response.data[0];
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPassword = password.trim();
+
+    const response = await api.get("/users");
+    const users = response.data;
+
+    console.log("Todos los usuarios:", users);
+
+    const foundUser = users.find(
+      (u) =>
+        u.email?.trim().toLowerCase() === cleanEmail &&
+        u.password?.trim() === cleanPassword
+    );
+
+    console.log("Usuario encontrado:", foundUser);
 
     if (!foundUser) {
       throw new Error("Correo o contraseña incorrectos");
@@ -31,14 +46,27 @@ export function AuthProvider({ children }) {
   };
 
   const register = async (newUser) => {
-    const checkUser = await api.get(`/users?email=${newUser.email}`);
+    const cleanUser = {
+      ...newUser,
+      name: newUser.name.trim(),
+      email: newUser.email.trim().toLowerCase(),
+      password: newUser.password.trim(),
+      role: newUser.role,
+    };
 
-    if (checkUser.data.length > 0) {
+    const response = await api.get("/users");
+    const users = response.data;
+
+    const existingUser = users.find(
+      (u) => u.email?.trim().toLowerCase() === cleanUser.email
+    );
+
+    if (existingUser) {
       throw new Error("Ya existe un usuario con ese correo");
     }
 
-    const response = await api.post("/users", newUser);
-    return response.data;
+    const registerResponse = await api.post("/users", cleanUser);
+    return registerResponse.data;
   };
 
   const logout = () => {

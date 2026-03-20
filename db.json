@@ -15,7 +15,7 @@
       "role": "usuario"
     },
     {
-      "id": "c7f8",
+      "id": "3",
       "name": "Lisandro",
       "email": "lisanro1995@gmail.com",
       "password": "Prueba1",
@@ -29,6 +29,13 @@
       "description": "Proyecto inicial",
       "status": "activo",
       "managerId": 1
+    },
+    {
+      "id": "f008",
+      "name": "Prueba",
+      "description": "Prueba",
+      "status": "activo",
+      "managerId": "3"
     }
   ],
   "tasks": [
