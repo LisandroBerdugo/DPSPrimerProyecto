@@ -27,6 +27,13 @@
       "email": "lrba@gmail.com",
       "password": "Prueba1",
       "role": "usuario"
+    },
+    {
+      "id": "e6a5",
+      "name": "ff",
+      "email": "ff@dd.com",
+      "password": "123456",
+      "role": "usuario"
     }
   ],
   "projects": [
