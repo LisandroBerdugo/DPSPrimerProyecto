@@ -1,53 +1,58 @@
+/* Contenedor principal de la pagina */
 .page {
-  --background: #fafafa;
-  --foreground: #fff;
+  --background: #fafafa; /* Fondo general */
+  --foreground: #fff; /* Fondo del contenido */
 
-  --text-primary: #000;
-  --text-secondary: #666;
+  --text-primary: #000; /* Texto principal */
+  --text-secondary: #666; /* Texto secundario */
 
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
+  --button-primary-hover: #383838; /* Hover boton principal */
+  --button-secondary-hover: #f2f2f2; /* Hover boton secundario */
+  --button-secondary-border: #ebebeb; /* Borde boton secundario */
 
   display: flex;
   flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
+  flex-direction: column; /* Layout vertical */
+  align-items: center; /* Centrado horizontal */
+  justify-content: center; /* Centrado vertical */
+  font-family: var(--font-geist-sans); /* Fuente personalizada */
   background-color: var(--background);
 }
 
+/* Contenedor interno principal */
 .main {
   display: flex;
   flex: 1;
   width: 100%;
-  max-width: 800px;
+  max-width: 800px; /* Limita ancho para mejor lectura */
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
   background-color: var(--foreground);
-  padding: 120px 60px;
+  padding: 120px 60px; /* Espaciado amplio */
 }
 
+/* Seccion introductoria */
 .intro {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  gap: 24px;
+  gap: 24px; /* Espacio entre elementos */
 }
 
+/* Titulo principal */
 .intro h1 {
   max-width: 320px;
   font-size: 40px;
   font-weight: 600;
   line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
+  letter-spacing: -2.4px; /* Ajuste fino tipografico */
+  text-wrap: balance; /* Mejora distribucion de texto */
   color: var(--text-primary);
 }
 
+/* Texto descriptivo */
 .intro p {
   max-width: 440px;
   font-size: 18px;
@@ -56,11 +61,13 @@
   color: var(--text-secondary);
 }
 
+/* Links dentro del bloque intro */
 .intro a {
   font-weight: 500;
   color: var(--text-primary);
 }
 
+/* Contenedor de botones (call to actions) */
 .ctas {
   display: flex;
   flex-direction: row;
@@ -70,31 +77,34 @@
   font-size: 14px;
 }
 
+/* Estilo base para botones tipo link */
 .ctas a {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 40px;
   padding: 0 16px;
-  border-radius: 128px;
+  border-radius: 128px; /* Botones tipo pill */
   border: 1px solid transparent;
-  transition: 0.2s;
+  transition: 0.2s; /* Animación suave */
   cursor: pointer;
   width: fit-content;
   font-weight: 500;
 }
 
+/* Boton principal */
 a.primary {
   background: var(--text-primary);
   color: var(--background);
   gap: 8px;
 }
 
+/* Boton secundario */
 a.secondary {
   border-color: var(--button-secondary-border);
 }
 
-/* Enable hover only on non-touch devices */
+/* Hover solo en dispositivos con mouse (evita problemas en moviles) */
 @media (hover: hover) and (pointer: fine) {
   a.primary:hover {
     background: var(--button-primary-hover);
@@ -107,9 +117,10 @@ a.secondary {
   }
 }
 
+/* Responsive para moviles */
 @media (max-width: 600px) {
   .main {
-    padding: 48px 24px;
+    padding: 48px 24px; /* Reduce padding */
   }
 
   .intro {
@@ -123,9 +134,10 @@ a.secondary {
   }
 }
 
+/* Tema oscuro */
 @media (prefers-color-scheme: dark) {
   .logo {
-    filter: invert();
+    filter: invert(); /* Invierte colores del logo */
   }
 
   .page {

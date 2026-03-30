@@ -1,47 +1,57 @@
+/* Variables globales */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #ffffff; /* Color de fondo */
+  --foreground: #171717; /* Color de texto */
 }
 
+/* Tema oscuro */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0a0a0a; /* Fondo oscuro */
+    --foreground: #ededed; /* Texto claro */
   }
 }
 
+/* Asegura que el html ocupe toda la altura */
 html {
   height: 100%;
 }
 
+/* Evita scroll horizontal innecesario */
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
 }
 
+/* Configuracion base del body */
 body {
-  min-height: 100%;
+  min-height: 100%; /* Permite layouts tipo full-height */
   display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  flex-direction: column; /* Util para layouts con header/footer */
+  color: var(--foreground); /* Usa variable de texto */
+  background: var(--background); /* Usa variable de fondo */
+  font-family: Arial, Helvetica, sans-serif; /* Fuente base */
+  
+  /* Suavizado de fuentes */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Reset global */
 * {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+  box-sizing: border-box; /* Incluye padding y border en el tamaño */
+  padding: 0; /* Elimina padding por defecto */
+  margin: 0; /* Elimina márgenes por defecto */
 }
 
+/* Estilo base para enlaces */
 a {
-  color: inherit;
-  text-decoration: none;
+  color: inherit; /* Hereda el color del elemento padre */
+  text-decoration: none; /* Elimina subrayado */
 }
 
+/* Indica al navegador que use esquema oscuro */
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

@@ -1,46 +1,50 @@
-"use client";
+"use client"; // Componente del lado cliente
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import AdminRoute from "../../components/AdminRoute";
-import { useAuth } from "../../context/AuthContext";
+import { useState } from "react"; // Manejar estado
+import Link from "next/link"; // Navegacion interna
+import { useRouter } from "next/navigation"; // Navegacion programatica
+import AdminRoute from "../../components/AdminRoute"; // Protege acceso solo a admins/gerentes
+import { useAuth } from "../../context/AuthContext"; // Contexto de autenticación
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const { register } = useAuth();
+  const router = useRouter(); // Router para redireccion
+  const { register } = useAuth(); // Funcion para registrar usuarios
 
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
-    role: "usuario",
-  });
+    role: "usuario", // Valor por defecto
+  }); // Estado del formulario
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // Estado para errores
 
+  // Maneja cambios en inputs (dinámico por name)
   const handleChange = (e) => {
     setForm({
-      ...form,
-      [e.target.name]: e.target.value,
+      ...form, // Mantiene valores existentes
+      [e.target.name]: e.target.value, // Actualiza campo específico
     });
   };
 
+  // Envío del formulario
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+    e.preventDefault(); // Evita recarga
+    setError(""); // Limpia errores previos
 
     try {
-      await register(form);
-      router.push("/dashboard");
+      await register(form); // Envía datos al backend
+      router.push("/dashboard"); // Redirige al dashboard
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Muestra error si falla
     }
   };
 
   return (
-    <AdminRoute>
+    <AdminRoute> {/* Solo accesible por usuarios autorizados */}
       <main className="container py-5">
+
+        {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="mb-0">Agregar usuario</h1>
 
@@ -54,21 +58,30 @@ export default function RegisterPage() {
           <div className="col-md-6">
             <div className="card shadow-sm">
               <div className="card-body">
-                {error && <div className="alert alert-danger">{error}</div>}
+
+                {/* Mensaje de error */}
+                {error && (
+                  <div className="alert alert-danger">
+                    {error}
+                  </div>
+                )}
 
                 <form onSubmit={handleSubmit}>
+
+                  {/* Nombre */}
                   <div className="mb-3">
                     <label className="form-label">Nombre</label>
                     <input
                       type="text"
                       name="name"
                       className="form-control"
-                      value={form.name}
+                      value={form.name} // Input controlado
                       onChange={handleChange}
                       required
                     />
                   </div>
 
+                  {/* Email */}
                   <div className="mb-3">
                     <label className="form-label">Correo</label>
                     <input
@@ -81,6 +94,7 @@ export default function RegisterPage() {
                     />
                   </div>
 
+                  {/* Password */}
                   <div className="mb-3">
                     <label className="form-label">Contraseña</label>
                     <input
@@ -93,12 +107,13 @@ export default function RegisterPage() {
                     />
                   </div>
 
+                  {/* Rol */}
                   <div className="mb-3">
                     <label className="form-label">Rol</label>
                     <select
                       name="role"
                       className="form-select"
-                      value={form.role}
+                      value={form.role} // Controlado por estado
                       onChange={handleChange}
                     >
                       <option value="usuario">Usuario</option>
@@ -106,11 +121,13 @@ export default function RegisterPage() {
                     </select>
                   </div>
 
+                  {/* Botón submit */}
                   <button type="submit" className="btn btn-success w-100">
                     <i className="bi bi-person-plus-fill me-2"></i>
                     Guardar usuario
                   </button>
                 </form>
+
               </div>
             </div>
           </div>

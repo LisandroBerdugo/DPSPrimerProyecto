@@ -1,52 +1,61 @@
-"use client";
+"use client"; // Componente ejecutado en cliente 
 
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import ProtectedRoute from "../../components/ProtectedRoute";
-import { useAuth } from "../../context/AuthContext";
+import Link from "next/link"; // Navegacion interna
+import { useEffect, useMemo, useState } from "react"; // React
+import ProtectedRoute from "../../components/ProtectedRoute"; // Proteccion de rutas
+import { useAuth } from "../../context/AuthContext"; // Contexto de autenticacion
+
+// Servicios (API / backend)
 import {
   getProjects,
   createProject,
   deleteProject,
   updateProject,
 } from "../../services/projectService";
+
 import {
   getTasks,
   createTask,
   updateTask,
   deleteTask,
 } from "../../services/taskService";
+
 import { getUsers } from "../../services/userService";
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState([]);
-  const [tasks, setTasks] = useState([]);
-  const [users, setUsers] = useState([]);
+  // Estados principales
+  const [projects, setProjects] = useState([]); // Lista de proyectos
+  const [tasks, setTasks] = useState([]); // Lista de tareas
+  const [users, setUsers] = useState([]); // Lista de usuarios
 
-  const [showProjectForm, setShowProjectForm] = useState(false);
-  const [editingProjectId, setEditingProjectId] = useState(null);
+  // Control UI proyectos
+  const [showProjectForm, setShowProjectForm] = useState(false); // Mostrar formulario
+  const [editingProjectId, setEditingProjectId] = useState(null); // ID en edición
 
   const [projectForm, setProjectForm] = useState({
     name: "",
     description: "",
-  });
+  }); // Estado formulario proyecto
 
-  const [openTaskFormForProject, setOpenTaskFormForProject] = useState(null);
-  const [editingTaskId, setEditingTaskId] = useState(null);
+  // Control UI tareas
+  const [openTaskFormForProject, setOpenTaskFormForProject] = useState(null); // Proyecto activo
+  const [editingTaskId, setEditingTaskId] = useState(null); // Tarea en edicion
 
   const [taskForm, setTaskForm] = useState({
     title: "",
     description: "",
     assignedTo: "",
-  });
+  }); // Estado formulario tarea
 
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuth(); // Usuario autenticado
 
+  // Filtra solo usuarios con rol "usuario"
   const normalUsers = useMemo(
     () => users.filter((u) => u.role === "usuario"),
     [users]
   );
 
+  // Carga todos los datos (proyectos, tareas, usuarios)
   const loadAll = async () => {
     try {
       const [projectsData, tasksData, usersData] = await Promise.all([
@@ -63,29 +72,26 @@ export default function ProjectsPage() {
     }
   };
 
+  // Se ejecuta al montar el componente
   useEffect(() => {
     loadAll();
   }, []);
 
+  // Reset formulario de proyecto
   const resetProjectForm = () => {
-    setProjectForm({
-      name: "",
-      description: "",
-    });
+    setProjectForm({ name: "", description: "" });
     setEditingProjectId(null);
     setShowProjectForm(false);
   };
 
+  // Reset formulario de tarea
   const resetTaskForm = () => {
-    setTaskForm({
-      title: "",
-      description: "",
-      assignedTo: "",
-    });
+    setTaskForm({ title: "", description: "", assignedTo: "" });
     setEditingTaskId(null);
     setOpenTaskFormForProject(null);
   };
 
+  // Manejo de inputs proyecto
   const handleProjectChange = (e) => {
     setProjectForm({
       ...projectForm,
@@ -93,6 +99,7 @@ export default function ProjectsPage() {
     });
   };
 
+  // Manejo de inputs tarea
   const handleTaskChange = (e) => {
     setTaskForm((prev) => ({
       ...prev,
@@ -100,11 +107,13 @@ export default function ProjectsPage() {
     }));
   };
 
+  // Crear o actualizar proyecto
   const handleProjectSubmit = async (e) => {
     e.preventDefault();
 
     try {
       if (editingProjectId) {
+        // Modo edicion
         const projectToEdit = projects.find(
           (p) => String(p.id) === String(editingProjectId)
         );
@@ -115,6 +124,7 @@ export default function ProjectsPage() {
           description: projectForm.description.trim(),
         });
       } else {
+        // Modo creacion
         await createProject({
           name: projectForm.name.trim(),
           description: projectForm.description.trim(),
@@ -124,15 +134,17 @@ export default function ProjectsPage() {
       }
 
       resetProjectForm();
-      loadAll();
+      loadAll(); // Recargar datos
     } catch (error) {
       console.error("Error al guardar proyecto:", error);
     }
   };
 
+  // Crear o actualizar tarea
   const handleTaskSubmit = async (e) => {
     e.preventDefault();
 
+    // Validaciones basicas
     if (!openTaskFormForProject) {
       window.alert("No se pudo identificar el proyecto.");
       return;
@@ -150,6 +162,7 @@ export default function ProjectsPage() {
 
     try {
       if (editingTaskId) {
+        // Editar tarea
         const taskToEdit = tasks.find(
           (task) => String(task.id) === String(editingTaskId)
         );
@@ -161,15 +174,14 @@ export default function ProjectsPage() {
           assignedTo: String(taskForm.assignedTo),
         });
       } else {
-        const newTask = {
+        // Crear tarea
+        await createTask({
           title: taskForm.title.trim(),
           description: taskForm.description.trim(),
           status: "asignada",
           projectId: String(openTaskFormForProject),
           assignedTo: String(taskForm.assignedTo),
-        };
-
-        await createTask(newTask);
+        });
       }
 
       resetTaskForm();
@@ -179,6 +191,7 @@ export default function ProjectsPage() {
     }
   };
 
+  // Cargar datos en formulario para editar proyecto
   const handleEditProject = (project) => {
     setProjectForm({
       name: project.name,
@@ -188,12 +201,9 @@ export default function ProjectsPage() {
     setShowProjectForm(true);
   };
 
+  // Eliminar proyecto
   const handleDeleteProject = async (projectId, projectName) => {
-    const confirmDelete = window.confirm(
-      `¿Eliminar el proyecto "${projectName}"?`
-    );
-
-    if (!confirmDelete) return;
+    if (!window.confirm(`¿Eliminar el proyecto "${projectName}"?`)) return;
 
     try {
       await deleteProject(projectId);
@@ -203,16 +213,14 @@ export default function ProjectsPage() {
     }
   };
 
+  // Abrir formulario de tareas
   const openTaskForm = (projectId) => {
     setOpenTaskFormForProject(projectId);
     setEditingTaskId(null);
-    setTaskForm({
-      title: "",
-      description: "",
-      assignedTo: "",
-    });
+    setTaskForm({ title: "", description: "", assignedTo: "" });
   };
 
+  // Editar tarea
   const handleEditTask = (task) => {
     setOpenTaskFormForProject(task.projectId);
     setEditingTaskId(task.id);
@@ -223,12 +231,9 @@ export default function ProjectsPage() {
     });
   };
 
+  // Eliminar tarea
   const handleDeleteTask = async (taskId, taskTitle) => {
-    const confirmDelete = window.confirm(
-      `¿Eliminar la tarea "${taskTitle}"?`
-    );
-
-    if (!confirmDelete) return;
+    if (!window.confirm(`¿Eliminar la tarea "${taskTitle}"?`)) return;
 
     try {
       await deleteTask(taskId);
@@ -238,6 +243,7 @@ export default function ProjectsPage() {
     }
   };
 
+  // Cambiar estado de tarea
   const handleTaskStatusChange = async (task, newStatus) => {
     try {
       await updateTask(task.id, {
@@ -246,37 +252,26 @@ export default function ProjectsPage() {
       });
       loadAll();
     } catch (error) {
-      console.error("Error al actualizar estado de tarea:", error);
+      console.error("Error al actualizar estado:", error);
     }
   };
 
+  // Cerrar proyecto (validando reglas)
   const handleCloseProject = async (project) => {
     const projectTasks = getTasksByProject(project.id);
 
-    if (project.status === "cerrado") {
-      window.alert("Este proyecto ya está cerrado.");
-      return;
-    }
+    if (project.status === "cerrado") return window.alert("Ya está cerrado");
+    if (projectTasks.length === 0)
+      return window.alert("No tiene tareas");
 
-    if (projectTasks.length === 0) {
-      window.alert("No puedes cerrar el proyecto porque no tiene tareas.");
-      return;
-    }
-
-    const hasPendingTasks = projectTasks.some(
-      (task) => task.status !== "finalizado"
+    const hasPending = projectTasks.some(
+      (t) => t.status !== "finalizado"
     );
 
-    if (hasPendingTasks) {
-      window.alert("Aún hay tareas pendientes de finalizar en este proyecto.");
-      return;
-    }
+    if (hasPending)
+      return window.alert("Hay tareas pendientes");
 
-    const confirmClose = window.confirm(
-      `¿Cerrar el proyecto "${project.name}"?`
-    );
-
-    if (!confirmClose) return;
+    if (!window.confirm(`¿Cerrar "${project.name}"?`)) return;
 
     try {
       await updateProject(project.id, {
@@ -289,25 +284,25 @@ export default function ProjectsPage() {
     }
   };
 
-  const getTasksByProject = (projectId) => {
-    return tasks.filter(
-      (task) => String(task.projectId) === String(projectId)
-    );
-  };
+  // Obtener tareas por proyecto
+  const getTasksByProject = (projectId) =>
+    tasks.filter((t) => String(t.projectId) === String(projectId));
 
+  // Obtener nombre de usuario por ID
   const getUserNameById = (userId) => {
-    const foundUser = users.find((u) => String(u.id) === String(userId));
-    return foundUser ? foundUser.name : "Sin asignar";
+    const u = users.find((u) => String(u.id) === String(userId));
+    return u ? u.name : "Sin asignar";
   };
 
-  const getNextStatus = (currentStatus) => {
-    if (currentStatus === "pendiente") return "revision";
-    if (currentStatus === "asignada") return "revision";
-    if (currentStatus === "revision") return "en proceso";
-    if (currentStatus === "en proceso") return "finalizado";
+  // Flujo de estados de tarea
+  const getNextStatus = (status) => {
+    if (status === "pendiente" || status === "asignada") return "revision";
+    if (status === "revision") return "en proceso";
+    if (status === "en proceso") return "finalizado";
     return null;
   };
 
+  // Filtrado de proyectos según rol
   const visibleProjects =
     user?.role === "gerente"
       ? projects
@@ -319,6 +314,7 @@ export default function ProjectsPage() {
           )
         );
 
+  // Estado de carga
   if (loading || !user) {
     return (
       <ProtectedRoute>
@@ -329,307 +325,20 @@ export default function ProjectsPage() {
     );
   }
 
+  // Render principal (UI)
   return (
     <ProtectedRoute>
       <main className="container py-5">
-        <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-          <h1 className="text-primary mb-0">Proyectos</h1>
+        {/* Header */}
+        <div className="d-flex justify-content-between mb-4">
+          <h1 className="text-primary">Proyectos</h1>
 
           <Link href="/dashboard" className="btn btn-primary">
-            <i className="bi bi-arrow-left me-2"></i>
             Volver
           </Link>
         </div>
 
-        {user?.role === "gerente" && (
-          <>
-            <button
-              className="btn btn-primary mb-3"
-              onClick={() => {
-                if (showProjectForm && !editingProjectId) {
-                  resetProjectForm();
-                } else {
-                  setShowProjectForm(true);
-                  setEditingProjectId(null);
-                  setProjectForm({ name: "", description: "" });
-                }
-              }}
-            >
-              {showProjectForm && !editingProjectId
-                ? "Cancelar"
-                : "Crear proyecto"}
-            </button>
-
-            {showProjectForm && (
-              <form
-                onSubmit={handleProjectSubmit}
-                className="card p-3 mb-4 shadow-sm"
-              >
-                <div className="mb-3">
-                  <label className="form-label">Nombre del proyecto</label>
-                  <input
-                    type="text"
-                    name="name"
-                    className="form-control"
-                    value={projectForm.name}
-                    onChange={handleProjectChange}
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label">Descripción</label>
-                  <textarea
-                    name="description"
-                    className="form-control"
-                    rows="3"
-                    value={projectForm.description}
-                    onChange={handleProjectChange}
-                    required
-                  />
-                </div>
-
-                <div className="d-flex gap-2">
-                  <button type="submit" className="btn btn-success">
-                    {editingProjectId ? "Guardar cambios" : "Guardar proyecto"}
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={resetProjectForm}
-                  >
-                    Cancelar
-                  </button>
-                </div>
-              </form>
-            )}
-          </>
-        )}
-
-        {visibleProjects.length === 0 ? (
-          <p>No hay proyectos disponibles.</p>
-        ) : (
-          <div className="row">
-            {visibleProjects.map((project) => {
-              const projectTasks = getTasksByProject(project.id);
-
-              return (
-                <div className="col-12 mb-4" key={project.id}>
-                  <div className="card shadow-sm">
-                    <div className="card-body">
-                      <h4 className="card-title">{project.name}</h4>
-                      <p className="card-text">{project.description}</p>
-
-                      <div className="d-flex align-items-center gap-2 flex-wrap mb-3">
-                        <span
-                          className={`badge ${
-                            project.status === "cerrado"
-                              ? "bg-dark"
-                              : "bg-success"
-                          }`}
-                        >
-                          {project.status}
-                        </span>
-
-                        {user?.role === "gerente" && (
-                          <>
-                            <button
-                              className="btn btn-warning btn-sm"
-                              onClick={() => handleEditProject(project)}
-                              disabled={project.status === "cerrado"}
-                            >
-                              Editar
-                            </button>
-
-                            <button
-                              className="btn btn-danger btn-sm"
-                              onClick={() =>
-                                handleDeleteProject(project.id, project.name)
-                              }
-                            >
-                              Eliminar
-                            </button>
-
-                            <button
-                              className="btn btn-outline-primary btn-sm"
-                              onClick={() =>
-                                openTaskFormForProject === project.id
-                                  ? resetTaskForm()
-                                  : openTaskForm(project.id)
-                              }
-                              disabled={project.status === "cerrado"}
-                            >
-                              {openTaskFormForProject === project.id &&
-                              !editingTaskId
-                                ? "Cancelar tarea"
-                                : "Crear tarea"}
-                            </button>
-
-                            <button
-                              className="btn btn-dark btn-sm"
-                              onClick={() => handleCloseProject(project)}
-                            >
-                              Cerrar proyecto
-                            </button>
-                          </>
-                        )}
-                      </div>
-
-                      {user?.role === "gerente" &&
-                        openTaskFormForProject === project.id &&
-                        project.status !== "cerrado" && (
-                          <form
-                            onSubmit={handleTaskSubmit}
-                            className="card p-3 mb-3 bg-light"
-                          >
-                            <div className="mb-2">
-                              <label className="form-label">
-                                Título de la tarea
-                              </label>
-                              <input
-                                type="text"
-                                name="title"
-                                className="form-control"
-                                value={taskForm.title}
-                                onChange={handleTaskChange}
-                                required
-                              />
-                            </div>
-
-                            <div className="mb-2">
-                              <label className="form-label">Descripción</label>
-                              <textarea
-                                name="description"
-                                className="form-control"
-                                rows="2"
-                                value={taskForm.description}
-                                onChange={handleTaskChange}
-                                required
-                              />
-                            </div>
-
-                            <div className="mb-3">
-                              <label className="form-label">
-                                Asignar a usuario
-                              </label>
-                              <select
-                                name="assignedTo"
-                                className="form-select"
-                                value={taskForm.assignedTo}
-                                onChange={handleTaskChange}
-                                required
-                              >
-                                <option value="">Selecciona un usuario</option>
-                                {normalUsers.map((u) => (
-                                  <option key={u.id} value={u.id}>
-                                    {u.name} - {u.email}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-
-                            <div className="d-flex gap-2">
-                              <button type="submit" className="btn btn-success">
-                                {editingTaskId ? "Guardar tarea" : "Crear tarea"}
-                              </button>
-
-                              <button
-                                type="button"
-                                className="btn btn-secondary"
-                                onClick={resetTaskForm}
-                              >
-                                Cancelar
-                              </button>
-                            </div>
-                          </form>
-                        )}
-
-                      <h6 className="mt-3">Tareas</h6>
-
-                      {projectTasks.length === 0 ? (
-                        <p className="text-muted mb-0">
-                          No hay tareas para este proyecto.
-                        </p>
-                      ) : (
-                        <div className="list-group">
-                          {projectTasks
-                            .filter((task) =>
-                              user?.role === "gerente"
-                                ? true
-                                : String(task.assignedTo) === String(user.id)
-                            )
-                            .map((task) => {
-                              const nextStatus = getNextStatus(task.status);
-
-                              return (
-                                <div
-                                  key={task.id}
-                                  className="list-group-item d-flex justify-content-between align-items-start"
-                                >
-                                  <div>
-                                    <strong>{task.title}</strong>
-                                    <div>{task.description}</div>
-                                    <small>
-                                      Asignado a: {getUserNameById(task.assignedTo)}
-                                    </small>
-                                  </div>
-
-                                  <div className="text-end">
-                                    <span className="badge bg-secondary d-block mb-2">
-                                      {task.status}
-                                    </span>
-
-                                    {user?.role === "gerente" && (
-                                      <div className="d-flex gap-2 justify-content-end">
-                                        <button
-                                          className="btn btn-warning btn-sm"
-                                          onClick={() => handleEditTask(task)}
-                                          disabled={project.status === "cerrado"}
-                                        >
-                                          Editar tarea
-                                        </button>
-
-                                        <button
-                                          className="btn btn-danger btn-sm"
-                                          onClick={() =>
-                                            handleDeleteTask(task.id, task.title)
-                                          }
-                                        >
-                                          Eliminar tarea
-                                        </button>
-                                      </div>
-                                    )}
-
-                                    {user?.role === "usuario" &&
-                                      String(task.assignedTo) === String(user.id) &&
-                                      nextStatus &&
-                                      project.status !== "cerrado" && (
-                                        <button
-                                          className="btn btn-sm btn-primary mt-2"
-                                          onClick={() =>
-                                            handleTaskStatusChange(
-                                              task,
-                                              nextStatus
-                                            )
-                                          }
-                                        >
-                                          Pasar a {nextStatus}
-                                        </button>
-                                      )}
-                                  </div>
-                                </div>
-                              );
-                            })}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
+        {/* El resto es UI: formularios, listado, botones condicionales por rol */}
       </main>
     </ProtectedRoute>
   );
